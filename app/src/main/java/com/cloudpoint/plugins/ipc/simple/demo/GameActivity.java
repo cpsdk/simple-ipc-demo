@@ -3,6 +3,7 @@ package com.cloudpoint.plugins.ipc.simple.demo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.cloudpoint.plugins.ipc.simple.DES;
 import com.cloudpoint.plugins.ipc.simple.IIpcResponse;
 import com.cloudpoint.plugins.ipc.simple.IpcIntentAction;
 import com.cloudpoint.plugins.ipc.simple.IpcIntentProxy;
@@ -26,6 +27,8 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        DES.des().setDesKey("deskey000202020202020");
 
         gameStateIpcIntentProxy =new IpcIntentProxy<>(getApplicationContext(),GameEndState.class);
         gameStateIpcIntentProxy.setCallback(gameStateIIpcResponse);
