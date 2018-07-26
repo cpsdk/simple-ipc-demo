@@ -34,6 +34,7 @@
                 <category android:name="119" />
             </intent-filter>
         </activity>
+
         <activity android:name=".Game2Activity">
             <intent-filter>
                 <action android:name="GameStart" />
