@@ -26,24 +26,24 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".GameActivity">
-            <intent-filter>
-                <action android:name="GameStart" />
+        <!--<activity android:name=".GameActivity">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="GameStart" />-->
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="119" />
-            </intent-filter>
-        </activity>
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+                <!--<category android:name="119" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
 
-        <activity android:name=".Game2Activity">
-            <intent-filter>
-                <action android:name="GameStart" />
+        <!--<activity android:name=".Game2Activity">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="GameStart" />-->
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="120" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+                <!--<category android:name="120" />-->
+            <!--</intent-filter>-->
 
-        </activity>
+        <!--</activity>-->
     </application>
 
 </manifest>

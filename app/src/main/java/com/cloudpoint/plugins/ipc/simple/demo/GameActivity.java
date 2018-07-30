@@ -2,6 +2,7 @@ package com.cloudpoint.plugins.ipc.simple.demo;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.cloudpoint.plugins.ipc.simple.DES;
 import com.cloudpoint.plugins.ipc.simple.IIpcResponse;
@@ -21,7 +22,7 @@ public class GameActivity extends AppCompatActivity {
         public void onData(GameEndState gameState) {
             //TODO
             //6.App告知游戏，已接收到消息
-            
+
         }
     };
     GameStart gameStart=null;
@@ -32,13 +33,18 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         //1.设置des密钥
-        DES.des().setDesKey("deskey000202020202020");
+       // DES.des().setDesKey("504107060920821");
+       // DES.des().setDesKey("504107060920821");
+        //DES.des().setDesKey("deskey000202020202020");
         //2.初始化游戏结束状态回调接口
         gameStateIpcIntentProxy =new IpcIntentProxy<>(getApplicationContext(),GameEndState.class);
         gameStateIpcIntentProxy.setCallback(gameStateIIpcResponse);
 
         //3. app启动GameActivity,将接收到GameStart参数
         gameStart=IpcIntentAction.get(getIntent(),GameStart.class);
+
+
+        //Log.d("Game",gameStart.getGameId()+"");
 
     }
 

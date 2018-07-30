@@ -27,5 +27,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
 
-    implementation "com.cloudpoint.plugins:shell-ipc-simple:1.0.9"
+    implementation "com.cloudpoint.plugins:shell-ipc-simple:1.0.12"
 }
