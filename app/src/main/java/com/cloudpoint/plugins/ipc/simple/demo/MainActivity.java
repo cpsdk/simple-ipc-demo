@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.cloudpoint.plugins.ipc.simple.DES;
 import com.cloudpoint.plugins.ipc.simple.IIpcResponse;
@@ -50,14 +52,21 @@ public class MainActivity extends AppCompatActivity implements IIpcResponse<Game
         //DES.des().setDesKey("504107060920821");
         //
         // send a command to start
-        GameStart start =new GameStart("id_129","199",100,30,System.currentTimeMillis());
-        Intent i = IpcIntentAction.get(start);
-        i.addCategory("119");
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        //i.setClassName("com.cloudpoint.plugins.ipc.simple.demo","GameActivity");
-        getApplicationContext().startActivity(i);
+        Button startApp=(Button)findViewById(R.id.startApp);
+        startApp.setOnClickListener(new View.OnClickListener(){
 
+            @Override
+            public void onClick(View v) {
+                GameStart start =new GameStart("id_129","199",100,30,System.currentTimeMillis());
+                Intent i = IpcIntentAction.get(start);
+                i.addCategory("119");
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                //i.setClassName("com.cloudpoint.plugins.ipc.simple.demo","GameActivity");
+                getApplicationContext().startActivity(i);
+            }
+        });
 
 
         //getApplicationContext().st
@@ -65,6 +74,9 @@ public class MainActivity extends AppCompatActivity implements IIpcResponse<Game
         //start.send(getApplicationContext());
 
     }
+
+
+
 
 
     @Override
