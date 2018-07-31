@@ -11,6 +11,7 @@ import com.cloudpoint.plugins.ipc.simple.IpcIntentAction;
 import com.cloudpoint.plugins.ipc.simple.IpcIntentProxy;
 import com.cloudpoint.plugins.ipc.simple.IpcPkgInfo;
 import com.cloudpoint.plugins.ipc.simple.domain.GameEnd;
+import com.cloudpoint.plugins.ipc.simple.domain.GameEndState;
 import com.cloudpoint.plugins.ipc.simple.domain.GameStart;
 import com.cloudpoint.plugins.ipc.simple.domain.GameStartState;
 
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements IIpcResponse<Game
         setContentView(R.layout.activity_main);
 
         IpcPkgInfo.setDebug(true);
-        DES.des().setDesKey("");
+        DES.des().setDesKey("123456789");
 
         gameStartStateIpcIntentProxy = new IpcIntentProxy<>(getApplicationContext(),GameStartState.class);
         gameStartStateIpcIntentProxy.setCallback(response);
@@ -79,6 +80,10 @@ public class MainActivity extends AppCompatActivity implements IIpcResponse<Game
 
     @Override
     public void onData(GameEnd gameEnd) {
+
         Log.d("CPLogger","GameEnd:"+gameEnd.toString());
+        GameEndState state =new GameEndState(gameEnd.getOrderId(),gameEnd.getGameId(),1,"ok",System.currentTimeMillis());
+        state.send(getApplicationContext());
+
     }
 }
