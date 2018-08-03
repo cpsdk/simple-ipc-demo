@@ -6,45 +6,45 @@ import android.util.Log;
 
 import com.cloudpoint.plugins.ipc.simple.DES;
 import com.cloudpoint.plugins.ipc.simple.IIpcResponse;
+import com.cloudpoint.plugins.ipc.simple.IpcGameSdk;
 import com.cloudpoint.plugins.ipc.simple.IpcIntentAction;
 import com.cloudpoint.plugins.ipc.simple.IpcIntentProxy;
+import com.cloudpoint.plugins.ipc.simple.IpcLipstickSdk;
+import com.cloudpoint.plugins.ipc.simple.IpcPkgInfo;
 import com.cloudpoint.plugins.ipc.simple.domain.GameEnd;
 import com.cloudpoint.plugins.ipc.simple.domain.GameEndState;
 import com.cloudpoint.plugins.ipc.simple.domain.GameStart;
 import com.cloudpoint.plugins.ipc.simple.domain.GameStartState;
+import com.cloudpoint.plugins.ipc.simple.protocol.BaseResponse;
+import com.cloudpoint.plugins.ipc.simple.protocol.IIpcCallback;
+import com.cloudpoint.plugins.ipc.simple.protocol.gl.GL0001;
+import com.cloudpoint.plugins.ipc.simple.protocol.lg.LG0001;
+import com.cloudpoint.plugins.ipc.simple.protocol.lg.LG0002;
+import com.cloudpoint.plugins.ipc.simple.protocol.lg.LG0003;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class GameActivity extends AppCompatActivity {
 
-    IpcIntentProxy<GameEndState> gameStateIpcIntentProxy;
 
-    final IIpcResponse<GameEndState> gameStateIIpcResponse=new IIpcResponse<GameEndState>() {
-        @Override
-        public void onData(GameEndState gameState) {
-            //TODO
-            //6.App告知游戏，已接收到消息
-
-        }
-    };
-    GameStart gameStart=null;
-
+    private void l(String message){
+        Log.d("IpcGameSdk-demo",message);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        //1.设置des密钥
-       // DES.des().setDesKey("504107060920821");
-       // DES.des().setDesKey("504107060920821");
-        //DES.des().setDesKey("deskey000202020202020");
-        //2.初始化游戏结束状态回调接口
-        gameStateIpcIntentProxy =new IpcIntentProxy<>(getApplicationContext(),GameEndState.class);
-        gameStateIpcIntentProxy.setCallback(gameStateIIpcResponse);
-
-        //3. app启动GameActivity,将接收到GameStart参数
-        gameStart=IpcIntentAction.get(getIntent(),GameStart.class);
 
 
-        //Log.d("Game",gameStart.getGameId()+"");
+        //TODO: 1. 设置日志输出
+        IpcPkgInfo.setDebug(true);
+        //TODO: 2. 初始化IpcGameSdk
+        IpcGameSdk.init(getApplicationContext(),"119","504107060920821");
+        //TODO: 3. 游戏EventBus
+        EventBus.getDefault().register(this);
 
     }
 
@@ -52,24 +52,73 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //4.游戏启动后，返回状态给app，说明游戏已启动，或游戏启动失败时返回失败状态。
-        GameStartState state =new GameStartState(gameStart.getOrderId(),gameStart.getGameId(),1,"ok",System.currentTimeMillis());
-        state.send(getApplicationContext());
+    }
+
+    /**
+     * 处理LG0001请求
+     * @param req
+     */
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void handleLG0001(LG0001.LG0001Req req){
+
+        l(req.toString());
+        // TODO: handle request ,then respone the state.
+        BaseResponse.tx(getApplicationContext(),req,0,"ok");
 
     }
 
-    //5.游戏结束时通知app游戏结果
-    private void onGameEnd(){
+    /**
+     * 处理LG0002请求
+     * @param req
+     */
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void handleLG0002(LG0002.LG0002Req req){
 
-        GameEnd end = new GameEnd(gameStart.getOrderId(), gameStart.getGameId(), true, System.currentTimeMillis());
-        IpcIntentAction.broadcast(getApplicationContext(),end);
+        l(req.toString());
+        // TODO: handle request ,then respone the state.
+        BaseResponse.tx(getApplicationContext(),req,0,"ok");
 
     }
+
+    /**
+     * 处理LG0003请求
+     * @param req
+     */
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void handleLG0003(LG0003.LG0003Req req){
+
+        l(req.toString());
+        // TODO: handle request ,then respone the state.
+        BaseResponse.tx(getApplicationContext(),req,0,"ok");
+
+
+        testGL0001(req.getOrderId());
+    }
+
+    /**
+     * 发出GL0001指令
+     * @param orderId
+     */
+    private void testGL0001(String orderId){
+        GL0001.GL0001Req req =new GL0001.GL0001Req();
+        req.setOrderId(orderId);
+        req.setState(1);
+        req.tx(getApplicationContext(), new IIpcCallback<BaseResponse>() {
+            @Override
+            public void call(BaseResponse baseResponse) {
+                l(baseResponse.toString());
+            }
+        });
+    }
+
+
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        //释放IpcGameSdk及EventBus
+        IpcGameSdk.onDestroy();
+        EventBus.getDefault().unregister(this);
 
     }
 }

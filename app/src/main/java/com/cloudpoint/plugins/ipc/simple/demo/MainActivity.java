@@ -7,58 +7,55 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.cloudpoint.plugins.ipc.simple.DES;
-import com.cloudpoint.plugins.ipc.simple.IIpcResponse;
 import com.cloudpoint.plugins.ipc.simple.IpcIntentAction;
-import com.cloudpoint.plugins.ipc.simple.IpcIntentProxy;
+
+import com.cloudpoint.plugins.ipc.simple.IpcLipstickSdk;
 import com.cloudpoint.plugins.ipc.simple.IpcPkgInfo;
-import com.cloudpoint.plugins.ipc.simple.domain.GameEnd;
-import com.cloudpoint.plugins.ipc.simple.domain.GameEndState;
+
 import com.cloudpoint.plugins.ipc.simple.domain.GameStart;
-import com.cloudpoint.plugins.ipc.simple.domain.GameStartState;
 
-public class MainActivity extends AppCompatActivity implements IIpcResponse<GameEnd> {
+import com.cloudpoint.plugins.ipc.simple.protocol.BaseResponse;
+import com.cloudpoint.plugins.ipc.simple.protocol.IIpcCallback;
+import com.cloudpoint.plugins.ipc.simple.protocol.gl.GL0001;
+import com.cloudpoint.plugins.ipc.simple.protocol.lg.BoxMeta;
+import com.cloudpoint.plugins.ipc.simple.protocol.lg.LG0001;
+import com.cloudpoint.plugins.ipc.simple.protocol.lg.LG0002;
+import com.cloudpoint.plugins.ipc.simple.protocol.lg.LG0003;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity {
 
 
+    private void l(String message){
+        Log.d("IpcLipstickSdk-demo",message);
+    }
 
-    IpcIntentProxy<GameStartState> gameStartStateIpcIntentProxy;
-
-    final IIpcResponse<GameStartState> response = new IIpcResponse<GameStartState>() {
-        @Override
-        public void onData(GameStartState gameStartState) {
-            Log.d("CPLogger",gameStartState.toString());
-        }
-    };
-
-    IpcIntentProxy<GameEnd> gameEndIpcIntentProxy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //TODO: 1. enable log verbose
         IpcPkgInfo.setDebug(true);
-        DES.des().setDesKey("123456789");
+        //TODO: 2. initialize Lipstick SDK
+        IpcLipstickSdk.init(getApplicationContext(),"123456712","119","504107060920821");
+        //TODO: 3. register event bus
+        EventBus.getDefault().register(this);
 
-        gameStartStateIpcIntentProxy = new IpcIntentProxy<>(getApplicationContext(),GameStartState.class);
-        gameStartStateIpcIntentProxy.setCallback(response);
-
-        gameEndIpcIntentProxy = new IpcIntentProxy<>(getApplicationContext(),GameEnd.class);
-        gameEndIpcIntentProxy.setCallback(this);
-       // IpcIntentAction.startService(IpcIntentAction.get(),IpcGameService.class);
-
-       // IpcIntentAction.createExplicitFromImplicitIntent(IpcIntentAction.get(),);
-        //
-        //DES.des().setDesKey("504107060920821");
-        //
-        // send a command to start
 
         Button startApp=(Button)findViewById(R.id.startApp);
         startApp.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-                GameStart start =new GameStart("id_129","199",100,30,System.currentTimeMillis());
+
+
+                GameStart start =new GameStart();
                 Intent i = IpcIntentAction.get(start);
                 i.addCategory("119");
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -69,11 +66,102 @@ public class MainActivity extends AppCompatActivity implements IIpcResponse<Game
         });
 
 
-        //getApplicationContext().st
+        findViewById(R.id.lg0001).setOnClickListener(new View.OnClickListener(){
 
-        //start.send(getApplicationContext());
+            @Override
+            public void onClick(View v) {
+                testLG0001Request();
+            }
+        });
+
+        findViewById(R.id.lg0002).setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                testLG0002();
+            }
+        });
+
+        findViewById(R.id.lg0003).setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                testLG0003();
+            }
+        });
+
+
+
+
 
     }
+
+
+
+    private void testLG0001Request(){
+        LG0001.LG0001Req req = new LG0001.LG0001Req();
+        req.setBackgroud("/image/backgroud.png");
+        req.setQr("/image/qr.png");
+
+        ArrayList<BoxMeta> boxes =new ArrayList<>();
+
+        boxes.add(new BoxMeta(1, "image", "brand", " colorSerial", "description" ));
+        ArrayList<String> icons =new ArrayList<>();
+        icons.add("/icons/icon.png");
+        req.setBoxMeta(boxes);
+        req.setPayIcons(icons);
+        req.setPhone("400-1111-2222");
+
+
+
+        req.tx(getApplicationContext(), new IIpcCallback<BaseResponse>() {
+            @Override
+            public void call(BaseResponse baseResponse) {
+                // on received.
+                l(baseResponse.toString());
+            }
+        });
+
+
+    }
+
+    private void testLG0002(){
+        LG0002.LG0002Req req =new LG0002.LG0002Req();
+        req.setBoxId(1);
+        req.setState(1);
+        req.tx(getApplicationContext(), new IIpcCallback<BaseResponse>() {
+            @Override
+            public void call(BaseResponse baseResponse) {
+                l(baseResponse.toString());
+            }
+        });
+    }
+
+
+    private void testLG0003(){
+        LG0003.LG0003Req req =new LG0003.LG0003Req();
+        req.setOrderId("order123939393");
+        req.setProbility(0);
+        req.setTimeout(30);
+        req.tx(getApplicationContext(), new IIpcCallback<BaseResponse>() {
+            @Override
+            public void call(BaseResponse baseResponse) {
+                // invoke
+                l(baseResponse.toString());
+
+            }
+        });
+    }
+
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void handleGL0001(GL0001.GL0001Req req){
+
+        l(req.toString());
+        // TODO: handle request ,then respone the state.
+        BaseResponse.tx(getApplicationContext(),req,0,"ok");
+
+    }
+
 
 
 
@@ -87,15 +175,12 @@ public class MainActivity extends AppCompatActivity implements IIpcResponse<Game
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        gameStartStateIpcIntentProxy.onDestory();
-    }
 
-    @Override
-    public void onData(GameEnd gameEnd) {
-
-        Log.d("CPLogger","GameEnd:"+gameEnd.toString());
-        GameEndState state =new GameEndState(gameEnd.getOrderId(),gameEnd.getGameId(),1,"ok",System.currentTimeMillis());
-        state.send(getApplicationContext());
+        //TODO: 4. destroy sdk and event bus
+        IpcLipstickSdk.onDestroy();
+        EventBus.getDefault().unregister(this);
 
     }
+
+
 }

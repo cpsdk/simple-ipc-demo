@@ -28,5 +28,5 @@ dependencies {
 
 
 
-    implementation "com.cloudpoint.plugins:shell-ipc-simple:1.0.12"
+    implementation "com.cloudpoint.plugins:shell-ipc-simple:1.0.23"
 }
