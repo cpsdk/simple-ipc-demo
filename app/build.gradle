@@ -4,11 +4,17 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.cloudpoint.plugins.ipc.simple.demo"
-        minSdkVersion 15
+        minSdkVersion 17
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        //multiDexEnabled true
+
+//        ndk {
+//            moduleName "vbar_api"
+//        }
+
     }
     buildTypes {
         release {
@@ -16,6 +22,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
 }
 
 dependencies {
@@ -28,5 +36,6 @@ dependencies {
 
 
 
-    implementation "com.cloudpoint.plugins:shell-ipc-simple:1.0.23"
+    implementation "com.cloudpoint.plugins:shell-ipc-simple:1.0.25"
+   
 }

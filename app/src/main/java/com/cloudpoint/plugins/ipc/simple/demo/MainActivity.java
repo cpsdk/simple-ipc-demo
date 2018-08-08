@@ -1,6 +1,7 @@
 package com.cloudpoint.plugins.ipc.simple.demo;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -62,6 +63,29 @@ public class MainActivity extends AppCompatActivity {
 
                 //i.setClassName("com.cloudpoint.plugins.ipc.simple.demo","GameActivity");
                 getApplicationContext().startActivity(i);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //testLG0001Request();
+                        testLG0003();
+                    }
+                },10000);
+//
+//
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        //testLG0003();
+//                        testLG0002();
+//                    }
+//                },15000);
+
+
+
+
+
+
             }
         });
 
@@ -100,8 +124,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void testLG0001Request(){
         LG0001.LG0001Req req = new LG0001.LG0001Req();
-        req.setBackgroud("/image/backgroud.png");
-        req.setQr("/image/qr.png");
+        req.setBackgroud("/storage/emulated/0/bg1.png");
+        req.setQr("/storage/emulated/0/qr1.png");
 
         ArrayList<BoxMeta> boxes =new ArrayList<>();
 
@@ -111,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
         req.setBoxMeta(boxes);
         req.setPayIcons(icons);
         req.setPhone("400-1111-2222");
+        req.setDeviceId("123456712");
 
 
 
@@ -141,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
     private void testLG0003(){
         LG0003.LG0003Req req =new LG0003.LG0003Req();
         req.setOrderId("order123939393");
-        req.setProbility(0);
+        req.setProbility(1);
         req.setTimeout(30);
         req.tx(getApplicationContext(), new IIpcCallback<BaseResponse>() {
             @Override
@@ -157,6 +182,8 @@ public class MainActivity extends AppCompatActivity {
     public void handleGL0001(GL0001.GL0001Req req){
 
         l(req.toString());
+
+        testLG0003();
         // TODO: handle request ,then respone the state.
         BaseResponse.tx(getApplicationContext(),req,0,"ok");
 
