@@ -11,6 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
 
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,12 +19,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".GameActivity">
-            <intent-filter>
-                <action android:name="GameStart" />
+            <!--<intent-filter>-->
+                <!--<action android:name="GameStart" />-->
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="119" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+                <!--<category android:name="119" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity android:name=".ScannedQrActivity">
 

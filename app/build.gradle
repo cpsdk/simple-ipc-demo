@@ -36,6 +36,6 @@ dependencies {
 
 
 
-    implementation "com.cloudpoint.plugins:shell-ipc-simple:1.0.25"
-    implementation "com.cloudpoint.plugins:shell-lipstick-qr:1.0.13"
+    implementation "com.cloudpoint.plugins:shell-ipc-simple:1.0.28"
+    implementation "com.cloudpoint.plugins:shell-lipstick-qr:1.0.14"
 }

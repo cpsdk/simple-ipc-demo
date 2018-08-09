@@ -67,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        //testLG0001Request();
-                        testLG0003();
+                        testLG0001Request();
+                        //testLG0003();
                     }
                 },10000);
 //
@@ -79,7 +79,16 @@ public class MainActivity extends AppCompatActivity {
 //                        //testLG0003();
 //                        testLG0002();
 //                    }
+//                },12000);
+//
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        testLG0003();
+//                       // testLG0002();
+//                    }
 //                },15000);
+
 
 
 
@@ -124,8 +133,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void testLG0001Request(){
         LG0001.LG0001Req req = new LG0001.LG0001Req();
-        req.setBackgroud("/storage/emulated/0/bg1.png");
-        req.setQr("/storage/emulated/0/qr1.png");
+        req.setBackgroud("/storage/emulated/0/bg.png");
+        req.setQr("/storage/emulated/0/qr.png");
 
         ArrayList<BoxMeta> boxes =new ArrayList<>();
 
@@ -144,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
             public void call(BaseResponse baseResponse) {
                 // on received.
                 l(baseResponse.toString());
+                testLG0002();
             }
         });
 
@@ -158,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void call(BaseResponse baseResponse) {
                 l(baseResponse.toString());
+                testLG0003();
             }
         });
     }
@@ -183,9 +194,10 @@ public class MainActivity extends AppCompatActivity {
 
         l(req.toString());
 
-        testLG0003();
+
         // TODO: handle request ,then respone the state.
         BaseResponse.tx(getApplicationContext(),req,0,"ok");
+        testLG0002();
 
     }
 
