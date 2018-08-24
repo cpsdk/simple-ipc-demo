@@ -1,5 +1,6 @@
 package com.cloudpoint.plugins.ipc.simple.demo;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -23,7 +24,23 @@ public class ScannedQrActivity extends AppCompatActivity  implements IScannedRes
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanned_qr);
-        com.cloudpoint.plugins.lipstick.qr.Pkg_Info.setDebug(false);
+        com.cloudpoint.plugins.lipstick.qr.Pkg_Info.setDebug(true);
+
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                ScannedQrSdk.closeDev();
+//                ScannedQrSdk.openDev(ScannedQrActivity.this);
+//
+//                if(ScannedQrSdk.connectState()!=null){
+//                    boolean r = ScannedQrSdk.connectState().state== ScannedQrConnectState.Connected.state?true:false;
+//                    ScannedQrSdk.enableScan(r);
+//                    ScannedQrSdk.enableLight(r);
+//                }
+//
+//                show(null);
+//            }
+//        },3000l);
 
         findViewById(R.id.openDev).setOnClickListener(new View.OnClickListener() {
             @Override

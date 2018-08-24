@@ -21,6 +21,7 @@ import com.cloudpoint.plugins.ipc.simple.protocol.gl.GL0001;
 import com.cloudpoint.plugins.ipc.simple.protocol.lg.LG0001;
 import com.cloudpoint.plugins.ipc.simple.protocol.lg.LG0002;
 import com.cloudpoint.plugins.ipc.simple.protocol.lg.LG0003;
+import com.cloudpoint.plugins.ipc.simple.protocol.lg.LG0004;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -93,6 +94,22 @@ public class GameActivity extends AppCompatActivity {
 
 
         testGL0001(req.getOrderId());
+    }
+
+
+    /**
+     * 处理LG0003请求
+     * @param req
+     */
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void handleLG0004(LG0004.LG0004Req req){
+
+        l(req.toString());
+        // TODO: handle request ,then respone the state.
+        BaseResponse.tx(getApplicationContext(),req,0,"ok");
+
+
+
     }
 
     /**
